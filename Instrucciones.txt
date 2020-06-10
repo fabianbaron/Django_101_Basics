@@ -1,0 +1,88 @@
+# El objetivo de este proyecto es crear una aplicación web usando el framework Django
+
+## Prerrequisitos:
+    Instalar el framework Django (https://www.djangoproject.com/download/)
+    Comprobar versión con el código:
+	    import django
+	    django.get_version()
+
+## Procedimiento para crear aplicación web:
+1. Situar la consola de comando en el directorio donde se quiere crear el proyecto usando el comando cd (en Windows)
+
+2. Crear el proyecto de Django usando el comando en la terminal:
+    - django-admin startproject Basics_django
+    - si dice que el comando no se reconoce, entonces se debe buscar el archivo django-admin.py y ejecutar:
+    python [ruta de python]\site-packages\django\bin\django-admin.py startproject basics_django
+
+    - Se debería crear automáticamente la carpeta con el nombre del proyecto y los archivos del proyecto:
+        - NombreProyecto
+            -NombreProyecto
+                - settings.py  # Tiene las configuraciones del sition web, Ej. complementos instalados, plantillas, etc
+                - urls.py  # Para agregar las urls de las diferentes web apps creadas en el servidor
+            -manage.py  # Este archivo sirve para administrar el sitio web del proyecto, iniciar servidor web, crear app
+
+3. Hacer la "migración" y crear tablas de datos
+    - cambiar el terminal al directorio del proyecto ($ cd NombreProyecto)
+    - $ python manage.py migrate
+    - Se crea la base de datos db.sqlite3
+
+4. Iniciar el servidor
+    - Terminal en el directorio del archivo manage.py
+    - $ python manage.py runserver
+    - Debería iniciar un servidor de desarrollo en localhost:8000
+
+5. Verificar en el explorador web
+    - http://localhost:8000
+    - Debería abrir el sition de bienvenida de django
+    - En la terminal que corre el servidor debería aparecer el log del servidor
+
+6. Crear el usuario administrador del servidor
+    - Terminal en el directorio del archivo manage.py
+    - $ python manage.py createsuperuser
+    - Colocar usuario y contraseña cuando lo pida
+
+7. Verificar el sitio de administrador
+    - http://localhost:8000/admin/
+    - loggearse con el usuario y contraseña
+    - Debería entrar al sitio donde se maneja la base de datos del servidor (crear usuarios y grupos)
+
+8. Crear la app
+    - Terminal en el directorio del archivo manage.py
+    - $ python manage.py startapp NombreApp
+    - Debería crearse una carpeta con el nombre de la app dentro de la carpeta principal del proyecto (NombreProyecto)
+    - Dentro de la carpeta de la aplicación deberían crearse los archivos
+        - __init__.py  # Registra la carpeta de la app como un módulo de python
+        - admin.py  # Para registrar las clases de los modelos de datos
+        - apps.py  # Donde se configura la web app.
+        - models.py  # Donde se crean las clases de modelos de bases de datos
+        - tests.py  # Para pruebas
+        - views.py  # Para crear las funciones de views y renderizar las plantillas html
+
+9. Registrar la app en el servidor
+    - Archivo settings.py del servidor
+    - Agregar el elemento 'NombreApp' a la lista INSTALLED_APPS
+
+10. Crear las funciones (páginas) de la app
+    - En el archivo views.py de la app, crear una función por página que se quiera mostrar
+
+11. Rutear las urls
+    - Crear un arhcivo urls.py en la carpeta de la web app
+    - Escribir en el archivo:
+        from django.urls import path
+        from .views import fcn_pagina1, fcn_pagina2, etc funciones que renderizan las diferentes páginas
+        urlpatterns = [
+        path('urlpagina1/', fcn_pagina1, name='Nombre pagina 1'),
+        path('urlpagina2/', fcn_pagina2, name='Nombre pagina 2'),
+        ]
+    - En el archivo urls.py del servidor
+        - Agregar el código
+            from django.urls import path, include
+            urlpatterns = [
+            path('admin/', admin.site.urls),
+            path('urlapp/', include('NombreApp.urls')),
+            ]
+12. Revisar las diferentes páginas de la web app:
+    - http://localhost:8000/urlapp/urlpagina1/
+    - http://localhost:8000/urlapp/urlpagina2/
+
+Listo
